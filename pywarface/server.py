@@ -4,36 +4,23 @@
 # both "normal" Warface, and Russian Warface.
 
 import requests
-from .region import Region
+from .region import RUSSIA, WORLD, Region
 from .userclass import Class
 from .user import User
+from typing import List
+from dataclasses import dataclass
 
 
 @dataclass
 class Server(object):
     """This class contains mappings from the my.com server codenames to their server numbers"""
 
-    # Known servers
-    RU_ALPHA: Server = Server(1, "Alpha", Region.RUSSIA)
-    RU_BRAVO: Server = Server(2, "Bravo", Region.RUSSIA)
-    RU_CHARLIE: Server = Server(3, "Charlie", Region.RUSSIA)
-    RU_DELTA: Server = Server(4, "Delta", Region.RUSSIA)
-    ALPHA: Server = Server(1, "Alpha", Region.WORLD)
-    BRAVO: Server = Server(2, "Bravo", Region.WORLD)
-    CHARLIE: Server = Server(3, "Charlie", Region.WORLD)
-    DELTA: Server = Server(4, "Delta", Region.WORLD)
-
     # Server data
     server_id: int
     server_codename: str
     region: Region
 
-    @staticmethod
-    def asList() -> list:
-        """Get a list of all known servers"""
-        return[Server.RU_ALPHA, Server.RU_BRAVO, Server.RU_CHARLIE, Server.RU_DELTA, Server.ALPHA, Server.BRAVO, Server.CHARLIE, Server.DELTA]
-
-    def getTop100(self, class_sort: Class = None) -> list:
+    def getTop100(self, class_sort: Class = None) -> List[dict]:
 
         # Build request
         req = {
@@ -52,4 +39,49 @@ class Server(object):
         return resp
 
     def getUser(self, username: str) -> User:
-        pass
+
+        # Request user info
+        resp: dict = requests.get(f"http://api.{self.region.ip_addr}/", params={
+                                  "name": username, "server": self.server_id}).json()
+
+        # Handle errors
+        failure = False
+        failure |= resp.get("message", "") == "Пользователь не найден"
+        failure |= "Ошибка" in resp.get("message", "")
+
+        if failure:
+            return None
+
+        # Build user info
+        user = User()
+        user.uid = resp.get("user_id", "")
+        user.nickname = resp.get("nickname", "")
+        user.experience = int(resp.get("experience", ""))
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+        user.uid = resp.get("user_id", "")
+
+        return user
+
+
+# Known servers
+RU_ALPHA: Server = Server(1, "Alpha", RUSSIA)
+RU_BRAVO: Server = Server(2, "Bravo", RUSSIA)
+RU_CHARLIE: Server = Server(3, "Charlie", RUSSIA)
+ALPHA: Server = Server(1, "Alpha", WORLD)
+BRAVO: Server = Server(2, "Bravo", WORLD)
+
+# Parsable list of servers
+server_list: list = [RU_ALPHA, RU_BRAVO, RU_CHARLIE,
+                     ALPHA, BRAVO]
