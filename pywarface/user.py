@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(init=False)
 class User:
     """All info about a user"""
 
