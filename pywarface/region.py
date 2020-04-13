@@ -13,6 +13,7 @@ class Region(object):
         self.ip_addr = master_server_addr
         self.name = region_name
 
-    def asList(self) -> list:
+    @staticmethod
+    def asList() -> list:
         """Get a list of all regions"""
-        return [self.WORLD, self.RUSSIA]
+        return [Region.WORLD, Region.RUSSIA]
