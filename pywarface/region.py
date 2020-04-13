@@ -1,3 +1,11 @@
+# There are technically two diffrent versions of Warface.
+# One is Russia-only, the other is for the rest of the world.
+# As far as I know, the games are mostly the same gameplay-wise,
+# but they physically use diffrent sets of servers, and have
+# seprate API endpoints (and even account databases)
+
+
+@dataclass
 class Region(object):
     """This class contains info for each region"""
 
@@ -8,10 +16,6 @@ class Region(object):
     # Class data
     ip_addr: str
     name: str
-
-    def __init___(self, master_server_addr, region_name):
-        self.ip_addr = master_server_addr
-        self.name = region_name
 
     @staticmethod
     def asList() -> list:
